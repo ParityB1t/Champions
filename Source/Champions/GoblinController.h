@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "GoblinController.generated.h"
 
 /**
@@ -18,7 +19,10 @@ class CHAMPIONS_API AGoblinController : public AAIController
     UPROPERTY(Category = BehaviorTree, VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	UBehaviorTree* BehaviorTree;
 
+    int32 bTargetEntityKeyID;    
+
 public:
     AGoblinController();
     void StartBehaviourTree();
+    int32 TargetEntityKeyID();
 };
