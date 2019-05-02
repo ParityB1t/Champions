@@ -4,25 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "PlayerCharacter.h"
 #include "GoblinController.generated.h"
 
 /**
  *
  */
-UCLASS()
+UCLASS(Blueprintable)
 class CHAMPIONS_API AGoblinController : public AAIController
 {
-	GENERATED_BODY()
+	GENERATED_UCLASS_BODY()
 
-    UPROPERTY(Category = BehaviorTree, VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
-	UBehaviorTree* BehaviorTree;
+    UPROPERTY()
+	UBehaviorTreeComponent* BehaviourComp;
 
-    int32 bTargetEntityKeyID;    
+    /*virtual void OnPossess(APawn*) override;
+    virtual void OnUnPossess() override;*/
 
-public:
-    AGoblinController();
-    void StartBehaviourTree();
-    int32 TargetEntityKeyID();
+public:    
+
+    void CheckAggro();
+
+    void SetPlayerTarget(APlayerCharacter*);
 };

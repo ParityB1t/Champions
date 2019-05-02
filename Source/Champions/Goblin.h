@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimBlueprint.h"
 #include "Goblin.generated.h"
@@ -17,7 +18,10 @@ class CHAMPIONS_API AGoblin : public ACharacter
     USkeletalMesh* GoblinMesh;
 
     UPROPERTY(Category = Gameplay, VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
-	UAnimBlueprint* GoblinAnimBlueprint;    
+	UAnimBlueprint* GoblinAnimBlueprint;
+
+    UPROPERTY(Category = Gameplay, VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	UBehaviorTree* GoblinBehaviorTree;
 
 public:
 	// Sets default values for this character's properties
@@ -27,7 +31,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+    UBehaviorTree* GetBehaviourTree();
 };

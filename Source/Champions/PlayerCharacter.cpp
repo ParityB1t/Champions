@@ -84,7 +84,6 @@ void APlayerCharacter::BeginPlay()
         AttackMoveTimeline->SetPropertySetObject(this); // timeline act on ths object
         AttackMoveTimeline->SetLooping(false);
         AttackMoveTimeline->SetTimelineLength(0.3f);
-        UE_LOG(LogTemp, Error, TEXT("Timeline Length"));
         AttackMoveTimeline->SetTimelineLengthMode(ETimelineLengthMode::TL_TimelineLength);
         AttackMoveTimeline->SetPlaybackPosition(0.0f, false);
 
@@ -165,8 +164,7 @@ void APlayerCharacter::PlayAttackAnimation()
 }
 
 void APlayerCharacter::MoveForwardDuringAttack(float interpolatedValue)
-{
-    UE_LOG(LogTemp, Error, TEXT("Moving forward"));
+{    
     AddMovementInput(GetActorForwardVector(), 0.2f);
 }
 

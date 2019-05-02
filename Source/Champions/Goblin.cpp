@@ -16,10 +16,17 @@ AGoblin::AGoblin()
     static ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(TEXT("/Game/InfinityBladeAdversaries/Enemy/Enemy_Gruntling/SK_Exodus_Gruntling"));
     check(mesh.Succeeded());
     static ConstructorHelpers::FObjectFinder<UAnimBlueprint> anim(TEXT("/Game/GoblinAnim"));
-    check(anim.Succeeded());    
+    check(anim.Succeeded());
+    static ConstructorHelpers::FObjectFinder<UBehaviorTree> bt(TEXT("/Game/GoblinBehaviorTree"));
+    check(bt.Succeeded());
+
+    UE_LOG(LogTemp, Error, TEXT("Initialised Goblin"));
 
     GoblinMesh = mesh.Object;
-    GoblinAnimBlueprint = anim.Object;    
+    GoblinAnimBlueprint = anim.Object;
+    GoblinBehaviorTree = bt.Object;
+
+    AIControllerClass = AGoblinController::StaticClass();
 }
 
 // Called when the game starts or when spawned
@@ -33,14 +40,16 @@ void AGoblin::BeginPlay()
         GetMesh()->SetAnimInstanceClass(GoblinAnimBlueprint->GeneratedClass);
     }
 
-    AGoblinController* controller = GetWorld()->SpawnActor<AGoblinController>(GetActorLocation(), GetActorRotation());
-    controller->Possess(this);
-    controller->StartBehaviourTree();
+    AIControllerClass = AGoblinController::StaticClass();
 }
 
 // Called every frame
 void AGoblin::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+UBehaviorTree* AGoblin::GetBehaviourTree()
+{
+    return GoblinBehaviorTree;
 }

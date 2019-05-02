@@ -7,33 +7,59 @@
 #include "EngineUtils.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyAllTypes.h"
-#include "PlayerCharacter.h"
+#include "Goblin.h"
 
-AGoblinController::AGoblinController()
+AGoblinController::AGoblinController(const FObjectInitializer& ObjectInitialiser)
+: Super(ObjectInitialiser)
 {
-    static ConstructorHelpers::FObjectFinder<UBehaviorTree> bt(TEXT("/Game/GoblinBehaviorTree"));
-    check(bt.Succeeded());
 
-    BehaviorTree = bt.Object;
-    Blackboard->InitializeBlackboard(*(BehaviorTree->BlackboardAsset)); // relying on using default for goblin BT
+    BrainComponent = BehaviourComp = ObjectInitialiser.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviourComp"));
 
-    bTargetEntityKeyID = Blackboard->GetKeyID("TargetEntity");
+    UE_LOG(LogTemp, Error, TEXT("Initialise components"))
 
-    for(TActorIterator<APlayerCharacter> PlayerItr(GetWorld()); PlayerItr; ++PlayerItr)
+    bWantsPlayerState = true;
+}
+
+
+/*void AGoblinController::OnPossess(APawn* InPawn)
+{
+    Super::OnPossess(InPawn);
+
+    AGoblin* goblin = Cast<AGoblin>(InPawn);
+    if (goblin && goblin->GetBehaviourTree())
     {
-        // for multiplayer, just set the array in blackboard
-        APlayerCharacter* player = *PlayerItr;
-        Blackboard->SetValue<UBlackboardKeyType_Object>(bTargetEntityKeyID, player);
-        break;
+        if (goblin->GetBehaviourTree()->BlackboardAsset)
+        {
+            Blackboard->InitializeBlackboard(*goblin->GetBehaviourTree()->BlackboardAsset); // relying on using default blackboard for goblin BT
+        }
+        BehaviourComp->StartTree(*goblin->GetBehaviourTree());
     }
 }
 
-void AGoblinController::StartBehaviourTree()
+void AGoblinController::OnUnPossess()
 {
-    RunBehaviorTree(BehaviorTree);
+    Super::OnUnPossess();
+
+    BehaviourComp->StopTree();
+}*/
+
+void AGoblinController::CheckAggro()
+{
+
 }
 
-int32 AGoblinController::TargetEntityKeyID()
+void AGoblinController::SetPlayerTarget(APlayerCharacter* player)
 {
-    return bTargetEntityKeyID;
+    /*if (GetWorld())
+    {
+        for (TActorIterator<APlayerCharacter> PlayerItr(GetWorld()); PlayerItr; ++PlayerItr)
+        {
+            // for multiplayer, just set the array in blackboard
+            APlayerCharacter* player = *PlayerItr;
+            UE_LOG(LogTemp, Error, TEXT("%s"), *player->GetName());
+
+            //break;
+        }
+    }*/
+    Blackboard->SetValue<UBlackboardKeyType_Object>("TargetEntity", player);
 }

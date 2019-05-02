@@ -7,5 +7,8 @@ AChampionsGameMode::AChampionsGameMode()
 {
 	// set default pawn class to our character class
 	DefaultPawnClass = APlayerCharacter::StaticClass();
+
+    /*AGoblinController* controller = GetWorld()->SpawnActor<AGoblinController>(GetActorLocation(), GetActorRotation());
+    controller->Possess(this);*/
 }
 
